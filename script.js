@@ -1,8 +1,9 @@
 // ==UserScript==
-// @author      n0xgg04
+// @author      n0xgg04 - Lương Tuấn Anh
 // @name        Auto đăng ký tín chỉ
 // @version     1.0.0
-// @updateURL https://github.com/
+// @include     *
+// @updateURL https://raw.githubusercontent.com/n0xgg04/PTIT_Auto_DangKyTin/main/script.js
 // @run-at      document-start
 // @license MIT
 // ==/UserScript==
