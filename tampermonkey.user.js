@@ -25,28 +25,26 @@ margin-bottom: 30px;
  <br>
  <label>Danh sách môn (Json) :</label>
  <textarea rows="10" cols="50" style="margin-top:10px;margin-bottom" name="dataR" id="dataR">
- [
-	{
-		"name": "Giáo dục thể chất",
-		"tableId": "BAS1107",
-		"key": "22"
-	},
-	{
-		"name": "Kinh tế chính trị",
-		"tableId": "BAS1151",
-		"key": "04"
-	},
-	{
-		"name": "Tin học cơ sở 2",
-		"tableId": "INT1155",
-		"key": "15"
-	},
-{
-		"name": "Giải tích 2",
-		"tableId": "BAS1204",
-		"key": "17"
-	}
-]
+[
+        {
+            "name": "Giáo dục thể chất",
+            "tableId": "BAS1107",
+            "key": "22",
+            "ntt": "  "
+        },
+        {
+            "name": "Kinh tế chính trị",
+            "tableId": "BAS1151",
+            "key": "04",
+            "ntt": "  "
+        },
+        {
+            "name": "Tin học cơ sở 2",
+            "tableId": "INT1155",
+            "key": "15",
+            "ntt":"  "
+        }
+    ]
  </textarea>
   <label>Tự động lưu: </label>
  <input type="checkbox" name="autosave" value="1" id="autosave">
@@ -58,6 +56,8 @@ margin-bottom: 30px;
 <td>Môn học</td>
 <td>Mã môn</td>
 <td>NMH</td>
+<td>NTT</td>
+<td>Hành động</td>
 </thead>
 <tbody>
 <tbody>
@@ -80,16 +80,19 @@ margin-bottom: 30px;
             "name": "Giáo dục thể chất",
             "tableId": "BAS1107",
             "key": "22",
+            "ntt": "  "
         },
         {
             "name": "Kinh tế chính trị",
             "tableId": "BAS1151",
             "key": "04",
+            "ntt": "  "
         },
         {
             "name": "Tin học cơ sở 2",
             "tableId": "INT1155",
-            "key": "15"
+            "key": "15",
+            "ntt":"  "
         }
     ]
 
@@ -116,7 +119,7 @@ margin-bottom: 30px;
         let i = 1;
         $("#monHoc > tbody").html("");
         arr.forEach((item) => {
-            $('#monHoc').append(`<tr><td>${i}</td><td>${item.name}</td><td>${item.tableId}</td><td>${item.key}</td></tr>`);
+            $('#monHoc').append(`<tr><td>${i}</td><td>${item.name}</td><td>${item.tableId}</td><td>${item.key}</td><td>${item.ntt}</td><td></td></tr>`);
             i++;
         })
     }
@@ -164,12 +167,19 @@ margin-bottom: 30px;
         return 1;
     }
 
+    const getKey = (tableId,key) => {
+        var data =  $('#divTDK > table > tbody > tr > td > input').val();
+        var arr = data.split('|')[0].split('  ') ;
+        if(arr.length>2) return `chk_${tableId}${key}    `;
+        return `chk_${tableId}${key}    `;
+    }
+
     async function Dangkymon(thongtin) {
         await switchTo(thongtin.tableId);
         await DelayTime(2000)
         var failedCount = 0
         setTimeout(() => {
-            while (Dangky(`chk_${thongtin.tableId}${thongtin.key}    `, thongtin.name) == 0 && failedCount < 10) {
+            while (Dangky(`chk_${thongtin.tableId}${thongtin.key}  ${thongtin.ntt}`, thongtin.name) == 0 && failedCount < 10) {
                 // DelayTime()
                 failedCount++;
                 console.error('%cFailed! \n', 'color: black;');
