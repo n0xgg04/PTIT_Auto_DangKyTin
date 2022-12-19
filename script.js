@@ -4,6 +4,7 @@
 // @version     1.0.0
 // @include     *
 // @updateURL https://raw.githubusercontent.com/n0xgg04/PTIT_Auto_DangKyTin/main/script.js
+// @require http://code.jquery.com/jquery-2.1.0.min.js
 // @run-at      document-start
 // @license MIT
 // ==/UserScript==
