@@ -4,7 +4,7 @@
 // @version      1.0.0
 // @description  Auto đăng ký tín chỉ PTIT
 // @author       n0xgg04 - Luong Tuan Anh
-// @updateURL https://raw.githubusercontent.com/n0xgg04/PTIT_Auto_DangKyTin/main/script.js
+// @updateURL https://raw.githubusercontent.com/n0xgg04/PTIT_Auto_DangKyTin/main/tampermonkey.user.js
 // @match        https://qldt.ptit.edu.vn/Default.aspx?page=dkmonhoc
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=edu.vn
 // @grant        none
@@ -48,6 +48,8 @@ margin-bottom: 30px;
  </textarea>
   <label>Tự động lưu: </label>
  <input type="checkbox" name="autosave" value="1" id="autosave">
+  <input style="margin-top:20px;" type="button" name="jsonShowHide" id="jsonShowHide" value="Hiện JSON">
+  <input style="margin-top:20px;" type="button" name="refresh" id="refresh" value="Nhập từ JSON">
 <div class="tableSubject" style="margin-top:20px;border: 1px solid">
 <table id="monHoc">
 <thead style=" background-color: #3f87a6;
@@ -67,13 +69,16 @@ margin-bottom: 30px;
  </div>
  </hr><br>
   <input style="margin-top:20px;" type="button" name="autopick" id="autopick" value="Đăng ký tín">
-   <input style="margin-top:20px;" type="button" name="refresh" id="refresh" value="Làm mới">
+   <input type="button" id="addMon" name="addMon" value="Thêm môn">
   <div id="n0x_result">
     <h5>Kết quả :</h5>
   </div>
  </div>
 
                        `);
+    $('#jsonShowHide').click(()=>{
+        if(document.getElementById("dataR").style.display=="none") $('#dataR').show(); else  $('#dataR').hide();
+    });
 
     var Danhsach = [
         {
@@ -95,6 +100,7 @@ margin-bottom: 30px;
             "ntt":"  "
         }
     ]
+    const save = localStorage.getItem('dangkyMon');
 
     $('#n0x_result').hide()
 
@@ -113,24 +119,55 @@ margin-bottom: 30px;
     };
 
 
-    const lamMoi = () => {
-        var arr = JSON.parse($('#dataR').val())
+
+    const lamMoi = (mode = false) => {
+        var save = localStorage.getItem('dangkyMon');
+        var arr;
+        if(save==null||save==" "){
+         arr = JSON.parse($('#dataR').val())
+
         console.log(arr)
+        }else{
+         arr = JSON.parse(save);
+         $('#dataR').html(save)
+        }
+        if(mode) arr=JSON.parse($('#dataR').val())
         let i = 1;
         $("#monHoc > tbody").html("");
         arr.forEach((item) => {
             $('#monHoc').append(`<tr><td>${i}</td><td>${item.name}</td><td>${item.tableId}</td><td>${item.key}</td><td>${item.ntt}</td><td></td></tr>`);
             i++;
         })
+         $('#monHoc').append(`<tr><td>Thêm</td><td><input type="text" name="addName" id="addName" placeholder="Tên môn ( tuỳ chọn )" required></td><td><input type="text" name="addtableId" id="addtableId" placeholder="Mã môn" required></td><td><input type="text" name="addNMH" id="addNMH" placeholder="NMH" required></td><td><input type="text" name="addNTT" id="addNTT" placeholder="NTT" required></td><td></td></tr>`);
     }
 
 
-
-
     $('#refresh').click(() => {
-        lamMoi()
+        lamMoi(true)
+        localStorage.setItem('dangkyMon',$('#dataR').val());
     });
 
+   $('#addMon').click( () => {
+        var arr = JSON.parse($('#dataR').val());
+        var ntt="  ";
+        if($('#addNTT').val()==""||$('#addNTT').val()==null) ntt="  "; else ntt=$('#addNTT').val();
+         arr.push({
+            "name": $('#addName').val(),
+            "tableId": $('#addtableId').val(),
+            "key": $('#addNMH').val(),
+            "ntt": ntt
+        });
+
+        let i = 1;
+        $('#dataR').html(JSON.stringify(arr))
+        $("#monHoc > tbody").html("");
+        arr.forEach((item) => {
+            $('#monHoc').append(`<tr><td>${i}</td><td>${item.name}</td><td>${item.tableId}</td><td>${item.key}</td><td>${item.ntt}</td><td></td></tr>`);
+            i++;
+        })
+         localStorage.setItem('dangkyMon',JSON.stringify(arr));
+         $('#monHoc').append(`<tr><td>Thêm</td><td><input type="text" name="addName" id="addName" placeholder="Tên môn ( tuỳ chọn )" required></td><td><input type="text" name="addtableId" id="addtableId" placeholder="Mã môn" required></td><td><input type="text" name="addNMH" id="addNMH" placeholder="NMH" required></td><td><input type="text" name="addNTT" id="addNTT" placeholder="NTT" required></td><td></td></tr>`);
+    });
 
     let delayTime = $("#delayTime").val()
 
@@ -214,5 +251,6 @@ margin-bottom: 30px;
     }
 
     lamMoi()
+    $('#dataR').hide();
 
 })();
