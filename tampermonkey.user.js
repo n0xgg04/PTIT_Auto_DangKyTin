@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         n0x - QLDT-DKTC
 // @namespace    http://tampermonkey.net/
-// @version      1.0.0
+// @version      .0.0
 // @description  Auto đăng ký tín chỉ PTIT
 // @author       n0xgg04 - Luong Tuan Anh
 // @updateURL https://raw.githubusercontent.com/n0xgg04/PTIT_Auto_DangKyTin/main/tampermonkey.user.js
